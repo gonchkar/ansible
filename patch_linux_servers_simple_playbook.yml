@@ -1,0 +1,10 @@
+---
+   - name: Playbook to Patch the Linux Servers
+     hosts: all
+     gather_facts: yes
+     tasks:
+        - name: Update/Upgrade all the Packages except JAVA and httpd pkg/s
+          yum :
+           name : '*'
+           exclude: java*,httpd*
+           state: latest
