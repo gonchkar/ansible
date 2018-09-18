@@ -1,0 +1,29 @@
+---
+- hosts: all
+  gather_facts : true
+  vars:
+  tasks:
+    - name: Enabling the ssh-key should only has root access
+      lineinfile:
+          dest: /etc/ssh/sshd_config
+          regexp: '^PermitRootLogin'
+          line: 'PermitRootLogin without-password'
+      notify:
+        - restart_sshd
+        - restart_ssh
+
+   handlers:
+     - name : restart_sshd
+       service:
+         name: sshd
+         status: restarted
+         enabled: true
+       when : ansible_distribution == 'Red Hat'
+     - name : restart_ssh
+       service:
+         name: ssh
+         status: restarted
+         enabled: true
+       when : ansible_distribution == 'Debian'
+
+
