@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: false
+  vars:
+   ssh_key: "/root/ansible/playbooks/files/key_file_name"
+  tasks:
+   - name : Copy the ssh key from ansible master to Slave servers
+     authorized_key:
+             key: "{{lookup('file',ssh_key)}}"
+             user: root
