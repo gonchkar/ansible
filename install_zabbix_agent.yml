@@ -1,0 +1,21 @@
+---
+- hosts: zabbix_agent_group
+  remote_user: root
+
+  tasks:
+   - name: install epel repo
+     yum: name=epel-release state=latest
+
+   - name: install Zabbix Agent on client servers
+     yum: name:zabbix22-agent state=latest
+
+   - name: Copy the Configuration file from Static files to Zabbix folder on Client server
+     copy: src= ansible/files/zabbix_agentd.conf dest=/etc/zabbix_agentd.conf seuser=system_u
+
+     notify:
+       - start zabbix-agent
+
+   handlers:
+    - name: start zabbix-agent
+      service: name=zabbix-agent state=started enabled=yes
+
